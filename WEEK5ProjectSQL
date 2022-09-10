@@ -1,0 +1,75 @@
+--Presentation week 5
+Create database Project_Week5
+Select * from PremierLeaguePlayers
+
+
+--Changing column name
+EXEC sp_rename 'PremierLeaguePlayers.G', 'Goals', 'COLUMN';
+EXEC sp_rename 'PremierLeaguePlayers.A', 'Assits', 'COLUMN';
+EXEC sp_rename 'PremierLeaguePlayers.Apps', 'Appearances', 'COLUMN';
+EXEC sp_rename 'PremierLeaguePlayers.Min', 'Minutes_Played', 'COLUMN';
+EXEC sp_rename 'PremierLeaguePlayers.Assits', 'Assists', 'COLUMN';
+EXEC sp_rename 'PremierLeaguePlayers.xG90', 'Expected_Goals_Per_90', 'COLUMN';
+EXEC sp_rename 'PremierLeaguePlayers.xA90', 'Expected_Assits_Per_90', 'COLUMN';
+
+
+--Display Total goals scored by each team
+Select Team, sum(Goals) as Total_Goals
+From PremierLeaguePlayers
+Group By Team
+Order by sum(Goals) DESC
+
+--Total assists by each  team
+Select Team, sum(Assists) as Total_Assists
+From PremierLeaguePlayers
+Group By Team
+Order by sum(Assists) DESC
+
+--Display goals scored by each player in Liverpool and manchester city
+SELECT Player, Team, Goals FROM PremierLeaguePlayers
+WHERE Team = 'Liverpool'
+GROUP BY Player, Team, Goals
+Order by Goals DESC
+
+SELECT Player, Team, Goals FROM PremierLeaguePlayers
+WHERE Team = 'Manchester City'
+GROUP BY Player, Team, Goals
+Order by Goals DESC
+
+
+--Expected goals per 90 minutes for players who have scored more than 10 goals
+SELECT Player, Team, Appearances, Goals, Expected_Goals_per_90, Minutes_played FROM PremierLeaguePlayers
+WHERE Goals > 10
+GROUP BY Player, Team, Appearances, Goals, Expected_Goals_per_90, Minutes_played 
+Order by Goals DESC
+
+--Minutes played 
+SELECT Player, Team, Appearances, Minutes_played, Goals FROM PremierLeaguePlayers
+WHERE Goals > 10
+GROUP BY Player, Team, Appearances, Minutes_played, Goals
+Order by minutes_played asc
+
+
+SELECT Player, Team, Appearances, Minutes_played, Assists FROM PremierLeaguePlayers
+WHERE Assists > 5
+GROUP BY Player, Team, Appearances, Minutes_played, Assists
+Order by minutes_played ASC
+
+--TOTAL PLAYERS IN EACH TEAM
+(select Team, COUNT(PLAYER) as Total_Players from PremierLeaguePlayers group by Team)
+ORDER BY Total_Players DESC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
